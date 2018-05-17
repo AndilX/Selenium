@@ -106,21 +106,6 @@ public class phpTest {
 
     }
 
-    @Test @Ignore
-    public void draggableMouseActionOne() throws InterruptedException {
-        driver.get("http://demoqa.com/");
-        driver.manage().window().fullscreen();
-
-        WebElement draggableMenuButton = driver.findElement(By.id("menu-item-140"));
-        draggableMenuButton.click();
-        Thread.sleep(2000);
-        WebElement draggableBox = driver.findElement(By.id("draggable"));
-
-        Actions builder = new Actions(driver);
-        builder.clickAndHold(draggableBox).moveByOffset(50,50).perform();
-        Thread.sleep(3000);
-    }
-
 
     @After
     public void tearDown(){
