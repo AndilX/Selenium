@@ -28,16 +28,17 @@ public class ApachePOIExcelWrite {
                 {"double", "Primitive", 8},
                 {"char", "Primitive", 1},
                 {"String", "Non-Primitive", "No fixed size"},
+                {"","",""},
                 {"A", "B", "C"},
                 {1, 3, 2},
                 {"$","%%","!!!!!"}
         };
 
-        int rowNum1 = 0;
-        System.out.println("Writing sheet 1");
+        int rowNum = 0;
+        System.out.println("Writing on sheet 1");
 
         for (Object[] datatype : datatypes) {
-            Row row = sheet1.createRow(rowNum1++);
+            Row row = sheet1.createRow(rowNum++);
             int colNum = 0;
             for (Object field : datatype) {
                 Cell cell = row.createCell(colNum++);
