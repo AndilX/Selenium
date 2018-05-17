@@ -10,6 +10,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,38 +28,53 @@ public class phpTest {
     }
 
     @Test
-    public void exampleSelenium() throws InterruptedException{
+    public void testPHP() throws InterruptedException{
         driver.manage().window();
         Thread.sleep(1000);
         driver.get("https://www.phptravels.net/en");
         Thread.sleep(3000);
         WebElement searchHotel = driver.findElement(By.tagName("input"));
-        Thread.sleep(1000);
+        Thread.sleep(3000);
         searchHotel.sendKeys("London");
+        Thread.sleep(3000);
+          Actions action = new Actions(driver);
+        action.sendKeys(Keys.ENTER).perform();
+        Thread.sleep(3000);
+
+        driver.findElement(By.id("adults")).click();
+        Thread.sleep(1000);
+        new Select(driver.findElement(By.id("adults"))).selectByVisibleText("3");
+        Thread.sleep(1000);
+        driver.findElement(By.id("adults")).click();
+        Thread.sleep(1000);
+        //check in-out
+        searchHotel.findElement(By.xpath("//*[@id=\"dpd1\"]/input")).click();
         Thread.sleep(2000);
-        searchHotel.findElement(By.xpath("//*[@id=\"select2-drop\"]/ul")).sendKeys(Keys.ARROW_DOWN,Keys.ENTER);
+        searchHotel.findElement(By.xpath("//tr[3]/td[6]")).click();
         Thread.sleep(2000);
-        searchHotel.findElement(By.xpath("//*[@id=\"select2-drop\"]/ul")).click();
+
+        List<WebElement> checkout = driver.findElements(By.className("day"));
+
+        for (int i = 1; i< checkout.size(); i++){
+
+            //System.out.println("20".equals(checkout.get(i).getText()));
+            if ("20".equals(checkout.get(i).getText())){
+                checkout.get(i).click();
+                break;
+            }
+        }
         Thread.sleep(2000);
-        driver.findElement(By.className("form input-lg dpd1")).click();
 
+        WebElement submitQuery = driver.findElement(By.xpath("//*[@id=\"HOTELS\"]/form/div[3]/div[3]/button"));
+        submitQuery.click();
         Thread.sleep(2000);
-        //driver.findElement(By.id("adults")).findElement(By.name("3")).click();
-//      Thread.sleep(2000);
-//      driver.findElement(By.className("form input-lg dpd2")).click();
 
-
-
-//        WebElement submitQuery = driver.findElement(By.className("btn-danger btn btn-lg btn-block pfb0 loader"));
-//        submitQuery.click();
-//        Thread.sleep(2000);
-
-        //assertEquals("Grand Plaza Apartments", driver.findElement(By.partialLinkText("Grand Plaza Apartments")).getText());
+        assertEquals("Grand Plaza Apartments", driver.findElement(By.partialLinkText("Grand Plaza Apartments")).getText());
 
     }
 
     @Test @Ignore
-    public void exampleSelenium2() throws InterruptedException{
+    public void testPHP2() throws InterruptedException{
         driver.manage().window().fullscreen();
         Thread.sleep(1000);
         driver.get("https://www.phptravels.net/");
