@@ -27,10 +27,7 @@ public class ApachePOIExcelWrite {
                 {"float", "Primitive", 4},
                 {"double", "Primitive", 8},
                 {"char", "Primitive", 1},
-                {"String", "Non-Primitive", "No fixed size"}
-        };
-
-        Object[][] datatests = {
+                {"String", "Non-Primitive", "No fixed size"},
                 {"A", "B", "C"},
                 {1, 3, 2},
                 {"$","%%","!!!!!"}
@@ -52,21 +49,6 @@ public class ApachePOIExcelWrite {
             }
         }
 
-        int rowNum2 = 0;
-        System.out.println("Writing sheet 2");
-
-        for (Object[] datatest: datatests) {
-            Row row = sheet2.createRow(rowNum2++);
-            int colNum2 = 0;
-            for (Object field : datatest) {
-                Cell cell = row.createCell(colNum2++);
-                if (field instanceof String) {
-                    cell.setCellValue((String) field);
-                } else if (field instanceof Integer) {
-                    cell.setCellValue((Integer) field);
-                }
-            }
-        }
 
         try {
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
