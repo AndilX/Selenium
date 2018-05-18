@@ -67,7 +67,7 @@ public class ShopTest {
         try {
             FileInputStream dataFile = new FileInputStream(new File(FILE_NAME));
             Workbook workbook = new XSSFWorkbook(dataFile);
-            Sheet datatypeSheet = workbook.getSheetAt(0);
+            Sheet datatypeSheet = workbook.getSheet("Test Data");
             Iterator<Row> iterator = datatypeSheet.iterator();
 
             while (iterator.hasNext()) {
@@ -81,7 +81,6 @@ public class ShopTest {
                     if (currentCell.getCellTypeEnum() == CellType.STRING) {
                         if ("email".equals(currentCell.getStringCellValue())) {
                             email = cellIterator.next().getStringCellValue();
-                            //System.out.println(email);
                         }
                     }
                 }
@@ -175,9 +174,9 @@ public class ShopTest {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.getSheet("Test Data");
-        Row row = sheet.createRow(3);
-
-        Cell cell = row.createCell(0);
+        Row row = sheet.getRow(15);
+        Cell cell = row.getCell(2);
+        cell.setCellType(CellType.STRING);
         cell.setCellValue("Pass");
 
         try {
