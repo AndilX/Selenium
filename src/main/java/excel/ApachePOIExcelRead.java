@@ -16,7 +16,6 @@ public class ApachePOIExcelRead {
     public static void main(String[] args) {
 
         try {
-
             FileInputStream excelFile = new FileInputStream(new File(FILE_NAME));
             Workbook workbook = new XSSFWorkbook(excelFile);
             Sheet datatypeSheet = workbook.getSheetAt(0);
