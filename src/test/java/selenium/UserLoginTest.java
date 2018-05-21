@@ -1,7 +1,6 @@
 package selenium;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.After;
@@ -11,9 +10,8 @@ import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 public class UserLoginTest {
@@ -54,13 +52,7 @@ public class UserLoginTest {
     }
 
     @Test
-    public void testUserLoginExcelWrite() throws InterruptedException{
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        System.out.println("Creating sheet....");
-        XSSFSheet sheet = workbook.createSheet("User Logins");
-
-        Object[][] datatypes = {
-                {"Username", "Password", "Result"}};
+    public void testUserLoginExcelReadWrite() throws InterruptedException{
 
         driver.manage().window();
         driver.get("http://thedemosite.co.uk/");
@@ -69,31 +61,64 @@ public class UserLoginTest {
         driver.findElement(By.linkText("3. Add a User")).click();
         Thread.sleep(1000);
 
+        try{
+        FileInputStream excelFile = new FileInputStream(new File(FILE_NAME));
+        Workbook workbook = new XSSFWorkbook(excelFile);
+        Sheet sheet1 = workbook.getSheetAt(0);
 
-        int rowNum = 1;
+        //reading file
+            Iterator<Row> iterator = sheet1.iterator();
 
-        for (Object[] datatype : datatypes) {
-            Row row = sheet.createRow(rowNum++);
-            int colNum = 0;
-            for (Object field : datatype) {
-                Cell cell = row.createCell(colNum++);
-                if (field instanceof String) {
-                    cell.setCellValue((String) field);
-                } else if (field instanceof Integer) {
-                    cell.setCellValue((Integer) field);
+            while (iterator.hasNext()) {
+
+                Row currentRow = iterator.next();
+                Iterator<Cell> cellIterator = currentRow.iterator();
+
+            while (cellIterator.hasNext()) {
+                Cell currentCell = cellIterator.next();
+                int rowIndex = currentCell.getRowIndex();
+
+                    if(rowIndex == 1){
+                        int columnIndex = currentCell.getColumnIndex();
+                        switch (columnIndex){
+                            case 1:
+                                String username = cellIterator.next().getStringCellValue();
+                                System.out.println(username);
+                                break;
+                            case 2:
+                                String password = cellIterator.next().getStringCellValue();
+                                System.out.println(password);
+                                break;
+                        }
+                    }
+
                 }
             }
-        }
 
-        try {
-            FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
-            workbook.write(outputStream);
-            workbook.close();
+
+        //writing result
+                int rowNum = 1;
+                Row row = sheet1.getRow(rowNum);
+                int colNum = 2;
+                Cell cell = row.createCell(colNum,CellType.STRING);
+                cell.setCellValue("PASS");
+
+                try {
+                    FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
+                    workbook.write(outputStream);
+                    workbook.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
     }
 
