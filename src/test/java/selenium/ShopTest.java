@@ -5,7 +5,6 @@ import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.*;
 import org.openqa.selenium.By;
@@ -17,8 +16,6 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.io.*;
 import java.util.Iterator;
-
-import static org.junit.Assert.assertEquals;
 
 public class ShopTest {
 

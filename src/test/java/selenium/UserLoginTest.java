@@ -1,5 +1,7 @@
 package selenium;
 
+import com.relevantcodes.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -16,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 
 public class UserLoginTest {
 	private static WebDriver driver;
+    ExtentReports report;
+    ExtentTest test;
     private static final String FILE_NAME = System.getProperty("user.dir") + "\\DemoSiteDDT.xlsx";
 
 	@Before
@@ -53,11 +57,17 @@ public class UserLoginTest {
 
     @Test
     public void testUserLoginExcelReadWrite() throws InterruptedException{
+//
+        // where to create the report file
+        report = new ExtentReports("C:\\Users\\QAC\\Desktop\\testResult\\automationreportUserLogin.html", true);
+        // init/start the test
+        test = report.startTest("Verify user login read data / write result");
 
         driver.manage().window();
         driver.get("http://thedemosite.co.uk/");
         Thread.sleep(1000);
-        // ERROR: Caught exception [unknown command [#]]
+
+        // ----------
         driver.findElement(By.linkText("3. Add a User")).click();
         Thread.sleep(1000);
 
@@ -66,7 +76,7 @@ public class UserLoginTest {
         Workbook workbook = new XSSFWorkbook(excelFile);
         Sheet sheet1 = workbook.getSheetAt(0);
 
-        //reading file
+//        //reading file
             Iterator<Row> iterator = sheet1.iterator();
 
             while (iterator.hasNext()) {
@@ -95,8 +105,35 @@ public class UserLoginTest {
                 }
             }
 
+            for (int rowNumb = 0; rowNumb<=3 ; rowNumb++){
+                Row row = sheet1.getRow(rowNumb+1);
+                for(int colNumb = 0;colNumb <= 1;colNumb++){
+                    Cell cell = row.getCell(rowNumb);
 
-        //writing result
+                    if (cell == null)
+                    {
+                        System.out.println("Cell is Empty in Column");
+                        break;
+
+                    } else if (cell.getCellTypeEnum() == CellType.STRING)
+                    {
+                        colNumb = 0;
+                        cell = row.getCell(colNumb);
+                        String username = cell.getStringCellValue();
+                        System.out.println(username);
+                        Cell cell2 = row.getCell(colNumb+1);
+                        String password = cell2.getStringCellValue();
+                        System.out.println(password);
+                    }
+                    break;
+
+                }
+
+
+            }
+
+//
+//        //writing result
                 int rowNum = 1;
                 Row row = sheet1.getRow(rowNum);
                 int colNum = 2;
@@ -118,6 +155,10 @@ public class UserLoginTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+        report.endTest(test);
+        report.flush();
 
 
     }
